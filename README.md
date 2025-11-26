@@ -21,7 +21,7 @@
 ### Environnement
 #### Conda :
 ```bash
-conda MCU_env create -f Environnement/MCU-environment.yml
+conda env create -f Environnement/MCU-environment.yml --name MCU_env
 conda activate MCU_env 
 ```
 
