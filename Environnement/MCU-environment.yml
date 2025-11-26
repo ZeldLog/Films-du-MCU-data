@@ -1,0 +1,4 @@
+name: ''
+channels:
+  - defaults
+prefix: /home/logan/miniconda3/envs/
