@@ -30,3 +30,4 @@ conda activate MCU_env
 ## Reference
 
 - https://developer.imdb.com/non-commercial-datasets/
+- https://github.com/RobertShippey/MCU/blob/master/MCU.csv
