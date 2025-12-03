@@ -9,6 +9,7 @@
 - Nombre de place vendu des films Marvel / ou un films particulier ( le plus populaire des FILMS Marvel) 
 -  Notation Films vs Série
 - Rentabilité (bénéfices obtenue - productions du films/série)
+- Popularité de l'acteur avant et après marvels
 
 
 ## Configuration
