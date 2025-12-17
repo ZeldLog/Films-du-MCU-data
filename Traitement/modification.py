@@ -39,4 +39,14 @@ def add_ratings(file_ratings,table):
     right_on=['tconst'])
     
     return merged
+
+def add_genres(file_basics,table):
+    genres = pd.read_csv(file_basics,sep='\t', dtype = str)
+    merged = table.merge(
+    genres[['tconst','genres']],
+    how='left',
+    left_on=['tconst'],
+    right_on=['tconst'])
+    
+    return merged
     
