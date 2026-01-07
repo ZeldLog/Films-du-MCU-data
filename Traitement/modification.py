@@ -49,4 +49,20 @@ def add_genres(file_basics,table):
     right_on=['tconst'])
     
     return merged
+
+def add_box_office(file_recette,table):
+    box_office = pd.read_csv(file_recette, dtype = str)
+    
+    box_office['box_office'] = pd.to_numeric(
+        box_office['box_office'],
+        errors='coerce'
+    )
+    
+    merged = table.merge(
+    box_office[['title','box_office']],
+    how='left',
+    left_on=['title'],
+    right_on=['title'])
+    
+    return merged
     

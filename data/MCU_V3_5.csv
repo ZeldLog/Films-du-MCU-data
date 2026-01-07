@@ -1,0 +1,60 @@
+title,release date,phase,film/tv,tconst,averageRating,numVotes,box_office
+Iron Man,2008-05,1,Film,tt0371746,7.9,1199197.0,585796247
+The Incredible Hulk,2008-06,1,Film,tt0800080,6.6,555195.0,264770996
+Iron Man 2,2010-05,1,Film,tt1228705,6.9,920923.0,623933331
+Thor,2011-05,1,Film,tt0800369,7.0,950526.0,449326618
+Captain America: The First Avenger,2011-07,1,Film,tt0458339,6.9,951309.0,370569774
+The Avengers,2012-05,1,Film,tt0848228,8.0,1533624.0,1520538536
+Iron Man 3,2013-05,2,Film,tt1300854,7.1,949301.0,1215577205
+Thor: The Dark World,2013-11,2,Film,tt1981115,6.7,765160.0,644783140
+Captain America: The Winter Soldier,2014-04,2,Film,tt1843866,7.7,954841.0,714421503
+Guardians of the Galaxy,2014-08,2,Film,tt2015381,8.0,1341445.0,774750147
+Avengers: Age of Ultron,2015-05,2,Film,tt2395427,7.3,980730.0,1407615874
+Ant-Man,2015-07,2,Film,tt0478970,7.2,767161.0,519311965
+Captain America: Civil War,2016-05,3,Film,tt3498820,7.8,909191.0,1155046416
+Doctor Strange,2016-11,3,Film,tt1211837,7.5,863809.0,677796076
+Guardians of the Galaxy Vol. 2,2017-05,3,Film,tt3896198,7.6,812861.0,869087963
+Spider-Man: Homecoming,2017-07,3,Film,tt2250912,7.4,778143.0,880166924
+Thor: Ragnarok,2017-11,3,Film,tt3501632,7.9,876311.0,855301806
+Black Panther,2018-02,3,Film,tt1825683,7.3,893898.0,1382248826
+Avengers: Infinity War,2018-04,3,Film,tt4154756,8.4,1331514.0,2052415039
+Ant-Man and the Wasp,2018-07,3,Film,tt5095030,7.0,484686.0,622674139
+Captain Marvel,2019-03,3,Film,tt4154664,6.7,647692.0,1131416446
+Avengers: Endgame,2019-04,3,Film,tt4154796,8.4,1402040.0,2799439100
+Spider-Man: Far From Home,2019-07,3,Film,tt6320628,7.3,618712.0,1131927996
+WandaVision,2021-01,4,TV (Disney+),tt9140560,7.9,407075.0,
+The Falcon and the Winter Soldier,2021-03,4,TV (Disney+),tt9208876,7.1,274944.0,
+Loki (Season 1),2021-06,4,TV (Disney+),tt9140554,8.2,459663.0,
+Black Widow,2021-07,4,Film,tt3480822,6.6,466747.0,379751655
+What If...? (Season 1),2021-08,4,TV (Disney+),tt10168312,7.3,157591.0,
+Shang-Chi and the Legend of the Ten Rings,2021-09,4,Film,tt9376612,7.3,477268.0,432243292
+Eternals,2021-11,4,Film,tt9032400,6.2,418644.0,402064899
+Hawkeye,2021-11,4,TV (Disney+),tt10160804,7.4,237486.0,
+Spider-Man: No Way Home,2021-12,4,Film,tt10872600,8.2,986904.0,1976900772
+Doctor Strange in the Multiverse of Madness,2022-05,4,Film,tt9419884,6.9,531160.0,955775804
+Thor: Love and Thunder,2022-07,4,Film,tt10648342,6.1,448302.0,760928081
+Black Panther: Wakanda Forever,2022-11,4,Film,tt9114286,6.6,344179.0,859208836
+Moon Knight,2022-03,4,TV (Disney+),tt10234724,7.3,302847.0,
+Ms. Marvel,2022-06,4,TV (Disney+),tt10857164,6.2,129054.0,
+She-Hulk: Attorney at Law,2022-08,4,TV (Disney+),tt10857160,5.2,205448.0,
+I Am Groot (Season 1),2022-08,4,TV (Disney+),tt13623136,6.9,105979.0,
+Werewolf by Night (Special),2022-10,4,TV (Disney+),tt15318872,7.1,77874.0,
+The Guardians of the Galaxy Holiday Special,2022-11,4,TV (Disney+),tt13623148,6.7,44979.0,
+Ant-Man and the Wasp: Quantumania,2023-02,5,Film,tt10954600,6.0,261353.0,476071180
+Guardians of the Galaxy Vol. 3,2023-05,5,Film,tt6791350,7.9,452894.0,845555777
+Secret Invasion,2023-06,5,TV (Disney+),tt13157618,5.8,87919.0,
+I Am Groot (Season 2),2023-09,5,TV (Disney+),tt28112290,6.6,,
+Loki (Season 2),2023-10,5,TV (Disney+),tt14094206,7.8,3259.0,
+The Marvels,2023-11,5,Film,tt10676048,5.5,157986.0,206136825
+What If...? (Season 2),2023-12,5,TV (Disney+),tt13622776,7.4,136536.0,
+Echo,2024-01,5,TV (Disney+),tt13966962,5.9,47364.0,
+Deadpool & Wolverine,2024-07,5,Film,tt6263850,7.5,10542.0,1338073645
+Your Friendly Neighborhood Spider-Man,2025-01,5,TV (Disney+),tt16027074,7.5,16911.0,
+Captain America: Brave New World,2025-02,5,Film,tt14513804,5.6,169950.0,415101577
+Daredevil: Born Again,2025-03,5,TV (Disney+),tt18923754,8.1,81525.0,
+Thunderbolts*,2025-05,5,Film,tt16446582,7.1,,382436917
+Ironheart,2025-06,5,TV (Disney+),tt13623126,4.5,63065.0,
+The Fantastic Four: First Steps,2025-07,6,Film,tt10676052,6.9,203288.0,521858728
+Eyes of Wakanda,2025-08,5,TV (Disney+),tt13968252,6.2,7717.0,
+Marvel Zombies,2025-10,5,TV (Disney+),tt16027014,7.0,18373.0,
+Wonder Man,2025-12,5,TV (Disney+),tt21066182,,,
