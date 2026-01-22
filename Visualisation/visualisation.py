@@ -325,3 +325,45 @@ def plot_genre_count(table_global):
     plt.bar(table['genres'], table['count'])
     
     plt.show()
+    
+    
+def plot_acteur_rating(table_global,table_actor):
+    
+    table_actor['Productions'] = table_actor['Productions'].apply(lambda x: x.split('; '))
+    table_actor = table_actor.explode('Productions').rename(columns={'Productions': 'title'})
+    
+    df_merged = pd.merge(table_actor, table_global, on='title', how='left')
+    df_merged = df_merged.dropna()
+
+    df_moyenne = df_merged.groupby('Actor')['box_office'].mean().reset_index().sort_values('box_office', ascending=False)
+    
+    fig, ax = plt.subplots(figsize=(16,9))
+    df_moyenne.plot(kind='bar', x='Actor', y='box_office', legend=False, ax=ax, rot=45)
+
+    ax.yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: f"{int(x):,} $")
+    )
+    ax.set_xticklabels(df_moyenne['Actor'], rotation=45, ha='right') 
+    ax.tick_params(axis='x', pad=8)
+
+    plt.title("Moyenne des box_office par acteurs du MCU SUR IMDB", fontsize=14)
+    plt.xlabel("Actor",fontsize=14)
+    plt.ylabel("box_office",fontsize=14)
+    plt.ylim(0, 2_000_000_000)
+    plt.bar(df_moyenne['Actor'], df_moyenne['box_office'])
+    plt.show()
+    
+    
+def plot_movie_per_year(table_year):
+    fig, ax = plt.subplots(figsize=(16,9))
+    table_year.plot(kind='bar', x='startYear', y='nombre_de_films', legend=False, ax=ax, rot=45)
+
+    ax.set_xticklabels(table_year['startYear'], rotation=45, ha='right') 
+    ax.tick_params(axis='x', pad=8)
+
+    plt.title("Nombre de Film par année", fontsize=14)
+    plt.xlabel("Année",fontsize=14)
+    plt.ylabel("Nombre de Film",fontsize=14)
+    plt.bar(table_year['startYear'], table_year['nombre_de_films'])
+    
+    plt.show()

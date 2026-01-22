@@ -65,4 +65,20 @@ def add_box_office(file_recette,table):
     right_on=['title'])
     
     return merged
-    
+
+def movie_per_year(table_movie):
+    table_movie = table_movie[table_movie["titleType"] == "movie"]
+    table_movie["startYear"] = table_movie["startYear"].replace("\\N", pd.NA)
+    table_movie = table_movie.dropna(subset=["startYear"])
+    table_movie["startYear"] = table_movie["startYear"].astype(int)
+    table_movie = table_movie[(table_movie["startYear"] < 2026) & (table_movie["startYear"] > 1980)]
+    table_movie_count = (
+        table_movie.groupby("startYear")
+          .size()
+          .reset_index(name="nombre_de_films")
+          .sort_values("startYear")
+    )
+    return table_movie_count
+
+
+
