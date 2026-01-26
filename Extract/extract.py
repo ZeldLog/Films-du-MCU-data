@@ -1,4 +1,5 @@
 import pandas as pd
+from Traitement.modification import *
 
 def tsvFileToCsv(tsv_file):
     
@@ -8,6 +9,15 @@ def tsvFileToCsv(tsv_file):
 
     print("Successfully made csv file")
     return csv_file
+
+
+def filtrer_par_tconst(liste_tconst, df, name=None):
+
+    df_filtre = df[df["tconst"].isin(liste_tconst)].reset_index(drop=True)
+    
+    if name is not None:
+        df_filtre['name'] = name
+    return df_filtre
     
 #tconst	ordering	nconst	category	job	characters
 
@@ -101,7 +111,7 @@ def all_movie_table(file_title_basic, chunksize=200_000):
     for chunk in pd.read_csv(
         file_title_basic,
         chunksize=chunksize,
-        usecols=["tconst", "titleType", "primaryTitle","startYear","runtimeMinutes"]
+        usecols=["tconst", "titleType", "primaryTitle","startYear","runtimeMinutes",]
     ):
 
         chunk = chunk[chunk['titleType'].isin(titleType_set)]
@@ -112,7 +122,6 @@ def all_movie_table(file_title_basic, chunksize=200_000):
     print("Successfully extracted all movie/series file data")  
     if result_chunks:
         result = pd.concat(result_chunks, ignore_index=True)
-        result.to_csv("./data/film.csv", index=False)
         return result
     else:
         return pd.DataFrame()

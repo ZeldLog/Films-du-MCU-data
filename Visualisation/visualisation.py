@@ -423,3 +423,34 @@ def plot_movies_and_series_per_year(table_year):
     ax.grid(True, linestyle='--', alpha=0.5)
 
     plt.show()
+    
+    
+
+def plot_average_ratings_per_franchise(dfs):
+
+    if not dfs:
+        print("La liste de DataFrames est vide.")
+        return
+    
+    moyennes = []
+    labels = []
+    
+    for i, df in enumerate(dfs):
+        if 'averageRating' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'averageRating'")
+        if 'name' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'name'")
+        
+        moyennes.append(df['averageRating'].mean())
+        labels.append(df['name'].iloc[0])  # on prend le premier nom de la colonne name
+    
+    # Affichage du plot
+    plt.figure(figsize=(8,5))
+    plt.bar(labels, moyennes, color='skyblue')
+    plt.ylim(0,10)
+    plt.xlabel("Franchise")
+    plt.ylabel("Moyenne des avis")
+    plt.title("Moyenne de avis sur les films populaire des franchises")
+    plt.show()
+    
+    return moyennes 
