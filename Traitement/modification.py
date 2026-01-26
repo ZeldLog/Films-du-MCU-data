@@ -66,19 +66,35 @@ def add_box_office(file_recette,table):
     
     return merged
 
-def movie_per_year(table_movie):
-    table_movie = table_movie[table_movie["titleType"] == "movie"]
-    table_movie["startYear"] = table_movie["startYear"].replace("\\N", pd.NA)
-    table_movie = table_movie.dropna(subset=["startYear"])
-    table_movie["startYear"] = table_movie["startYear"].astype(int)
-    table_movie = table_movie[(table_movie["startYear"] < 2026) & (table_movie["startYear"] > 1980)]
-    table_movie_count = (
-        table_movie.groupby("startYear")
-          .size()
-          .reset_index(name="nombre_de_films")
-          .sort_values("startYear")
+def movies_and_series_per_year(table_movie):
+
+    df = table_movie.copy()
+    df["startYear"] = df["startYear"].replace("\\N", pd.NA)
+    df = df.dropna(subset=["startYear"])
+    df["startYear"] = df["startYear"].astype(int)
+    df = df[(df["startYear"] < 2026) & (df["startYear"] > 1980)]
+
+    movies_per_year = (
+        df[df["titleType"] == "movie"]
+        .groupby("startYear")
+        .size()
+        .reset_index(name="nombre_de_films")
     )
-    return table_movie_count
 
+    series_per_year = (
+        df[df["titleType"] != "movie"]
+        .groupby("startYear")
+        .size()
+        .reset_index(name="nombre_de_serie")
+    )
 
+    table_year = (
+        pd.merge(movies_per_year, series_per_year, on="startYear", how="outer")
+        .fillna(0)
+        .sort_values("startYear")
+    )
 
+    table_year["nombre_de_films"] = table_year["nombre_de_films"].astype(int)
+    table_year["nombre_de_serie"] = table_year["nombre_de_serie"].astype(int)
+
+    return table_year

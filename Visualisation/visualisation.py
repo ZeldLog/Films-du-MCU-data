@@ -367,3 +367,59 @@ def plot_movie_per_year(table_year):
     plt.bar(table_year['startYear'], table_year['nombre_de_films'])
     
     plt.show()
+    
+    
+def plot_serie_per_year(table_year):
+    fig, ax = plt.subplots(figsize=(16,9))
+    table_year.plot(kind='bar', x='startYear', y='nombre_de_serie', legend=False, ax=ax, rot=45)
+
+    ax.set_xticklabels(table_year['startYear'], rotation=45, ha='right') 
+    ax.tick_params(axis='x', pad=8)
+
+    plt.title("Nombre de série par année", fontsize=14)
+    plt.xlabel("Année",fontsize=14)
+    plt.ylabel("Nombre de série",fontsize=14)
+    plt.bar(table_year['startYear'], table_year['nombre_de_serie'])
+    
+    plt.show()
+
+
+def plot_movies_and_series_per_year(table_year):
+    fig, ax = plt.subplots(figsize=(16, 9))
+    
+    ax.set_xlim(
+    table_year['startYear'].min() + 1,
+    table_year['startYear'].max() + 1
+    )
+    
+    ax.axvspan(
+        2019,
+        table_year['startYear'].max() + 1,
+        color='red',
+        alpha=0.15,
+    )
+
+    ax.plot(
+        table_year['startYear'],
+        table_year['nombre_de_films'],
+        marker='o',
+        label='Films'
+    )
+
+    ax.plot(
+        table_year['startYear'],
+        table_year['nombre_de_serie'],
+        marker='o',
+        label='Séries'
+    )
+
+    ax.set_title("Nombre de films et de séries par année", fontsize=14)
+    ax.set_xlabel("Année", fontsize=14)
+    ax.set_ylabel("Nombre", fontsize=14)
+    ax.set_xticks(table_year['startYear'])
+    ax.set_xticklabels(table_year['startYear'], rotation=45, ha='right')
+    ax.tick_params(axis='x', pad=8)
+    ax.legend()
+    ax.grid(True, linestyle='--', alpha=0.5)
+
+    plt.show()
