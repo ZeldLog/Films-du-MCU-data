@@ -28,21 +28,25 @@ def main():
     ratings_file = '../title.ratings.tsv'
     mcu_file = 'data/MCU_V3_5.csv'
 
-    table_movie = pd.read_csv(film_file)  
+    # table_movie = pd.read_csv(film_file) 
+    
+    
     
     table_mcu = pd.read_csv(mcu_file)
     table_mcu['name'] = "MCU"
     
-    table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
-    table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
-    table_dcu = filtrer_par_tconst(star_wars,table_movie,"DCU")
+    boxplot_par_type_matplotlib(table_mcu) 
     
-    table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
-    dfs = [table_mcu,table_sw,table_dcu]
+    # table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
+    # table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
+    # table_dcu = filtrer_par_tconst(star_wars,table_movie,"DCU")
     
-    plot_average_ratings_per_franchise(dfs)
+    # table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
+    # dfs = [table_mcu,table_sw,table_dcu]
     
-    #table_movie.to_csv("./data/film.csv", index=False)
+    # plot_average_ratings_per_franchise(dfs)
+    
+    # table_movie.to_csv("./data/film.csv", index=False)
     
     # year_table = movies_and_series_per_year(table_movie)
     # plot_movies_and_series_per_year(year_table)

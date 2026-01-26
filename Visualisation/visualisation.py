@@ -13,7 +13,7 @@ def plot_film_rating_per_phases(table):
         6: 'brown'
     }
     
-    table = table[table['film/tv'] == "Film"].copy()
+    table = table[table['titleType'] == "Film"].copy()
     
     phases = table['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
@@ -59,7 +59,7 @@ def plot_series_rating_per_phases(table):
         6: 'brown'
     }
     
-    table = table[table['film/tv'] == "TV (Disney+)"].copy()
+    table = table[table['titleType'] == "TV (Disney+)"].copy()
     
     phases = table['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
@@ -135,7 +135,7 @@ def plot_film_box_office_per_phases(table):
         5: 'orange',
         6: 'brown'
     }
-    films = table[table['film/tv'] == "Film"]
+    films = table[table['titleType'] == "Film"]
     phases = films['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
     
@@ -184,7 +184,7 @@ def plot_film_box_office_yearly_average(table):
         6: 'brown'
     }
 
-    films = table[table['film/tv'] == "Film"].copy()
+    films = table[table['titleType'] == "Film"].copy()
 
     films['release date'] = pd.to_datetime(films['release date'], format='%Y-%m')
     films['year'] = films['release date'].dt.year
@@ -454,3 +454,38 @@ def plot_average_ratings_per_franchise(dfs):
     plt.show()
     
     return moyennes 
+
+
+def boxplot_par_type_matplotlib(df):
+    """
+    Affiche un boxplot des notes moyennes (averageRating) 
+    en fonction du type (titleType : movie ou series) avec matplotlib.
+    
+    Paramètre :
+    df : pandas DataFrame contenant au moins les colonnes
+         'titleType' et 'averageRating'
+    """
+    if 'titleType' not in df.columns or 'averageRating' not in df.columns:
+        raise ValueError("Le DataFrame doit contenir 'titleType' et 'averageRating'")
+    
+    # Nettoyer les types (supprimer espaces autour)
+    df['titleType'] = df['titleType'].str.strip()
+    
+    # Extraire les types uniques
+    types = df['titleType'].unique()
+    
+    # Construire la liste des données à tracer en filtrant les NaN
+    data = [df[df['titleType'] == t]['averageRating'].dropna() for t in types]
+    
+    # Vérifier qu'on a bien des données
+    if all(len(d) == 0 for d in data):
+        raise ValueError("Aucune donnée valide à tracer. Vérifie 'averageRating'.")
+
+    # Créer le boxplot
+    plt.figure(figsize=(8,6))
+    plt.boxplot(data, labels=types, showfliers=False)
+    plt.title("Répartition des notes par type de production du MCU")
+    plt.xlabel("Type (Film ou Série)")
+    plt.ylabel("Note moyenne")
+    plt.ylim(0, 10)
+    plt.show()
