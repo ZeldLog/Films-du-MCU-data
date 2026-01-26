@@ -423,3 +423,35 @@ def plot_movies_and_series_per_year(table_year):
     ax.grid(True, linestyle='--', alpha=0.5)
 
     plt.show()
+
+    
+def plot_distribution_percentages(df_actors):
+    # Forcer l’ordre et les valeurs attendues
+    order = [0, 25, 50, 75, 100]
+
+    counts = (
+        df_actors["pourcentage_films"]
+        .round(0)
+        .astype(int)
+        .value_counts()
+        .reindex(order, fill_value=0)
+    )
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.bar(order, counts.values, width=15, color="steelblue")
+
+    ax.set_title(
+        "Répartition des acteurs selon le pourcentage ",
+        fontsize=14
+    )
+    ax.set_xlabel("Pourcentage selon les 4 Films ayant rendu célèbre l'acteur", fontsize=12)
+    ax.set_ylabel("Nombre de personnes", fontsize=12)
+
+    # ✅ Abscisses en int + symbole %
+    ax.set_xticks(order)
+    ax.set_xticklabels([f"{x}%" for x in order])
+
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.show()

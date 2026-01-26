@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 
 def removeData(table,column_name,data_to_remove):
     table=table[table[column_name]!=data_to_remove]
@@ -98,3 +99,17 @@ def movies_and_series_per_year(table_movie):
     table_year["nombre_de_serie"] = table_year["nombre_de_serie"].astype(int)
 
     return table_year
+
+def add_percentage_movies(df_actors, df_movies):
+    movie_set = set(df_movies["tconst"])
+
+    def compute_percentage(known_titles):
+        titles = known_titles.split(",")
+        total = len(titles)
+        present = sum(1 for t in titles if t in movie_set)
+        return (present / total) * 100 if total > 0 else 0
+
+    df_actors = df_actors.copy()
+    df_actors["pourcentage_films"] = df_actors["knownForTitles"].apply(compute_percentage)
+
+    return df_actors
