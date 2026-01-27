@@ -126,6 +126,7 @@ def plot_genre_ratings(table_global):
     
     plt.show()
     
+    
 def plot_film_box_office_per_phases(table):
     phases_colors = {
         1: 'red',
@@ -335,24 +336,62 @@ def plot_acteur_rating(table_global,table_actor):
     df_merged = pd.merge(table_actor, table_global, on='title', how='left')
     df_merged = df_merged.dropna()
 
-    df_moyenne = df_merged.groupby('Actor')['box_office'].mean().reset_index().sort_values('box_office', ascending=False)
+    df_moyenne = df_merged.groupby('Character')['box_office'].mean().reset_index().sort_values('box_office', ascending=False)
     
     fig, ax = plt.subplots(figsize=(16,9))
-    df_moyenne.plot(kind='bar', x='Actor', y='box_office', legend=False, ax=ax, rot=45)
+    df_moyenne.plot(kind='bar', x='Character', y='box_office', legend=False, ax=ax, rot=45)
 
     ax.yaxis.set_major_formatter(
         ticker.FuncFormatter(lambda x, pos: f"{int(x):,} $")
     )
-    ax.set_xticklabels(df_moyenne['Actor'], rotation=45, ha='right') 
+    ax.set_xticklabels(df_moyenne['Character'], rotation=45, ha='right') 
     ax.tick_params(axis='x', pad=8)
 
-    plt.title("Moyenne des box_office par acteurs du MCU SUR IMDB", fontsize=14)
-    plt.xlabel("Actor",fontsize=14)
-    plt.ylabel("box_office",fontsize=14)
+    plt.title("Moyenne des notes des films du MCU dans lequelle il a jouer", fontsize=14)
+    plt.xlabel("Personnage",fontsize=14)
+    plt.ylabel("Moyenne des notes des films du MCU",fontsize=14)
     plt.ylim(0, 2_000_000_000)
-    plt.bar(df_moyenne['Actor'], df_moyenne['box_office'])
+    plt.tight_layout()
+    plt.bar(df_moyenne['Character'], df_moyenne['box_office'])
     plt.show()
     
+def plot_personnage_apparitions(table_actor):
+
+    table_actor = table_actor.copy()
+
+    # Séparer les films et exploser
+    table_actor['Productions'] = table_actor['Productions'].apply(lambda x: x.split('; '))
+    table_actor = table_actor.explode('Productions')
+
+    # Compter le nombre d'apparitions par personnage
+    df_apparitions = (
+        table_actor
+        .groupby('Character')
+        .size()
+        .reset_index(name='MCU_Appearances')
+        .sort_values('MCU_Appearances', ascending=False)
+    )
+
+    fig, ax = plt.subplots(figsize=(16, 9))
+
+    ax.bar(
+        df_apparitions['Character'],
+        df_apparitions['MCU_Appearances'],
+        color='darkorange'
+    )
+
+    ax.set_title(
+        "Nombre d'apparitions des personnages dans le MCU",
+        fontsize=16
+    )
+    ax.set_xlabel("Personnage", fontsize=14)
+    ax.set_ylabel("Nombre d'apparitions", fontsize=14)
+
+    # Gestion des labels longs
+    ax.set_xticklabels(df_apparitions['Character'], rotation=45, ha='right')
+    fig.subplots_adjust(bottom=0.35)
+
+    plt.show()
     
 def plot_movie_per_year(table_year):
     fig, ax = plt.subplots(figsize=(16,9))
@@ -442,13 +481,12 @@ def plot_distribution_percentages(df_actors):
     ax.bar(order, counts.values, width=15, color="steelblue")
 
     ax.set_title(
-        "Répartition des acteurs selon le pourcentage ",
+        "Répartition des acteurs selon le pourcentage de popularité obtenue avec un films du MCU ",
         fontsize=14
     )
-    ax.set_xlabel("Pourcentage selon les 4 Films ayant rendu célèbre l'acteur", fontsize=12)
+    ax.set_xlabel("Pourcentage selon le nombre de films du MCU présent dans la liste ayant rendu célèbre l'acteur", fontsize=12)
     ax.set_ylabel("Nombre de personnes", fontsize=12)
 
-    # ✅ Abscisses en int + symbole %
     ax.set_xticks(order)
     ax.set_xticklabels([f"{x}%" for x in order])
 
@@ -488,7 +526,7 @@ def plot_average_ratings_per_franchise(dfs):
     return moyennes 
 
 
-def boxplot_par_type_matplotlib(df):
+def boxplot_per_type_matplotlib(df):
     """
     Affiche un boxplot des notes moyennes (averageRating) 
     en fonction du type (titleType : movie ou series) avec matplotlib.
@@ -559,139 +597,5 @@ def scatter_notes_popularite(df):
     plt.xlim(0, 10)
     plt.grid(True, linestyle='--', alpha=0.4)
     plt.show()
-
-    
-def plot_distribution_percentages(df_actors):
-    # Forcer l’ordre et les valeurs attendues
-    order = [0, 25, 50, 75, 100]
-
-    counts = (
-        df_actors["pourcentage_films"]
-        .round(0)
-        .astype(int)
-        .value_counts()
-        .reindex(order, fill_value=0)
-    )
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    ax.bar(order, counts.values, width=15, color="steelblue")
-
-    ax.set_title(
-        "Répartition des acteurs selon le pourcentage ",
-        fontsize=14
-    )
-    ax.set_xlabel("Pourcentage selon les 4 Films ayant rendu célèbre l'acteur", fontsize=12)
-    ax.set_ylabel("Nombre de personnes", fontsize=12)
-
-    # ✅ Abscisses en int + symbole %
-    ax.set_xticks(order)
-    ax.set_xticklabels([f"{x}%" for x in order])
-
-    ax.grid(axis="y", linestyle="--", alpha=0.5)
-
-    plt.show()
-    
     
 
-def plot_average_ratings_per_franchise(dfs):
-
-    if not dfs:
-        print("La liste de DataFrames est vide.")
-        return
-    
-    moyennes = []
-    labels = []
-    
-    for i, df in enumerate(dfs):
-        if 'averageRating' not in df.columns:
-            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'averageRating'")
-        if 'name' not in df.columns:
-            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'name'")
-        
-        moyennes.append(df['averageRating'].mean())
-        labels.append(df['name'].iloc[0])  # on prend le premier nom de la colonne name
-    
-    # Affichage du plot
-    plt.figure(figsize=(8,5))
-    plt.bar(labels, moyennes, color='skyblue')
-    plt.ylim(0,10)
-    plt.xlabel("Franchise")
-    plt.ylabel("Moyenne des avis")
-    plt.title("Moyenne des avis sur les films populaire des franchises")
-    plt.show()
-    
-    return moyennes 
-
-
-def boxplot_par_type_matplotlib(df):
-    """
-    Affiche un boxplot des notes moyennes (averageRating) 
-    en fonction du type (titleType : movie ou series) avec matplotlib.
-    
-    Paramètre :
-    df : pandas DataFrame contenant au moins les colonnes
-         'titleType' et 'averageRating'
-    """
-    if 'titleType' not in df.columns or 'averageRating' not in df.columns:
-        raise ValueError("Le DataFrame doit contenir 'titleType' et 'averageRating'")
-    
-    # Nettoyer les types (supprimer espaces autour)
-    df['titleType'] = df['titleType'].str.strip()
-    
-    # Extraire les types uniques
-    types = df['titleType'].unique()
-    
-    # Construire la liste des données à tracer en filtrant les NaN
-    data = [df[df['titleType'] == t]['averageRating'].dropna() for t in types]
-    
-    # Vérifier qu'on a bien des données
-    if all(len(d) == 0 for d in data):
-        raise ValueError("Aucune donnée valide à tracer. Vérifie 'averageRating'.")
-
-    # Créer le boxplot
-    plt.figure(figsize=(8,6))
-    plt.boxplot(data, labels=types, showfliers=False)
-    plt.title("Répartition des notes par type de production du MCU")
-    plt.xlabel("Type (Film ou Série)")
-    plt.ylabel("Note moyenne")
-    plt.ylim(0, 10)
-    plt.show()
-    
-    
-def scatter_notes_popularite(df):
-    """
-    Nuage de points : popularité (numVotes) vs note moyenne (averageRating)
-    """
-    # Vérifications
-    required = {'numVotes', 'averageRating'}
-    if not required.issubset(df.columns):
-        raise ValueError("Colonnes requises : numVotes, averageRating")
-
-    # Nettoyage
-    df = df.dropna(subset=['numVotes', 'averageRating'])
-
-    plt.figure(figsize=(8,6))
-    plt.scatter(
-        df['averageRating'],
-        df['numVotes'],
-        alpha=0.5,
-        s=20
-    )
-
-
-    y_min = df['numVotes'].min()
-    y_max = df['numVotes'].max()
-    
-    print(y_max)
-
-    plt.ylim(y_min * 0.9, y_max * 1.1)
-    plt.gca().yaxis.set_major_formatter(
-        ticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", " "))
-    )
-    plt.title("Relation entre nombre de votes et note moyenne des productions global")
-    plt.ylabel("Nombre de votes")
-    plt.xlabel("Note moyenne")
-    plt.xlim(0, 10)
-    plt.grid(True, linestyle='--', alpha=0.4)
-    plt.show()

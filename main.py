@@ -36,28 +36,31 @@ def main():
     film_file = 'data/film.csv'
     ratings_file = '../title.ratings.tsv'
     mcu_file = 'data/MCU_V3_5.csv'
-
-    table_movie = pd.read_csv(film_file) 
-    
-    
-    
+    actor_file = 'data/Acteur.csv'
+    name_file = 'data/name.csv'
+ 
+    table_actor = pd.read_csv(actor_file)
+    table_name = pd.read_csv(name_file)
     table_mcu = pd.read_csv(mcu_file)
     table_mcu['name'] = "MCU"
     
-    # scatter_notes_popularite(table_movie) 
+    # plot_acteur_rating(table_mcu,table_actor)
+    # plot_personnage_apparitions(table_actor)
+    table_name = add_percentage_movies(table_name,table_mcu)
+    plot_distribution_percentages(table_name)
     
-    table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
-    table_hp = filtrer_par_tconst(harry_potter,table_movie,"Harry Potter")
-    table_dcu = filtrer_par_tconst(dcu,table_movie,"DCU")
-    table_r_evil = filtrer_par_tconst(r_evil,table_movie,"Resident Evil")
-    table_alien = filtrer_par_tconst(alien,table_movie,"Alien")
+    ### Comparaison notes par franchises ###
+    table_movie = pd.read_csv(film_file)
+    # table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
+    # table_hp = filtrer_par_tconst(harry_potter,table_movie,"Harry Potter")
+    # table_dcu = filtrer_par_tconst(dcu,table_movie,"DCU")
+    # table_r_evil = filtrer_par_tconst(r_evil,table_movie,"Resident Evil")
+    # table_alien = filtrer_par_tconst(alien,table_movie,"Alien")
+    # dfs = [table_mcu,table_sw,table_hp,table_dcu,table_r_evil,table_alien]
+    # plot_average_ratings_per_franchise(dfs)
     
-    dfs = [table_mcu,table_sw,table_hp,table_dcu,table_r_evil,table_alien]
-    
-    plot_average_ratings_per_franchise(dfs)
     
     # table_movie.to_csv("./data/film.csv", index=False)
-    
     # year_table = movies_and_series_per_year(table_movie)
     # plot_movies_and_series_per_year(year_table)
     
