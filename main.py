@@ -23,28 +23,38 @@ dcu = ["tt0770828","tt2975590","tt0974015",
        "tt0439572","tt0451279","tt7126948",
        "tt5950044","tt1877830"]
 
+r_evil = ["tt0120804","tt0318627","tt0432021",
+          "tt1174954","tt1220634","tt13173144",
+          "tt1753496","tt1855325","tt2592614",
+          "tt26240498","tt6920084"]
+
+alien = ["tt0078748","tt0090605","tt0103644",
+         "tt0118583","tt1446714","tt2316204",
+         "tt18412256","tt0370263","tt0758730"]
+
 def main():
     film_file = 'data/film.csv'
     ratings_file = '../title.ratings.tsv'
     mcu_file = 'data/MCU_V3_5.csv'
 
-    # table_movie = pd.read_csv(film_file) 
+    table_movie = pd.read_csv(film_file) 
     
     
     
     table_mcu = pd.read_csv(mcu_file)
     table_mcu['name'] = "MCU"
     
-    boxplot_par_type_matplotlib(table_mcu) 
+    # scatter_notes_popularite(table_movie) 
     
-    # table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
-    # table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
-    # table_dcu = filtrer_par_tconst(star_wars,table_movie,"DCU")
+    table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
+    table_hp = filtrer_par_tconst(harry_potter,table_movie,"Harry Potter")
+    table_dcu = filtrer_par_tconst(dcu,table_movie,"DCU")
+    table_r_evil = filtrer_par_tconst(r_evil,table_movie,"Resident Evil")
+    table_alien = filtrer_par_tconst(alien,table_movie,"Alien")
     
-    # table_hp = filtrer_par_tconst(star_wars,table_movie,"Harry Potter")
-    # dfs = [table_mcu,table_sw,table_dcu]
+    dfs = [table_mcu,table_sw,table_hp,table_dcu,table_r_evil,table_alien]
     
-    # plot_average_ratings_per_franchise(dfs)
+    plot_average_ratings_per_franchise(dfs)
     
     # table_movie.to_csv("./data/film.csv", index=False)
     
