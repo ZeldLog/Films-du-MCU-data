@@ -1,5 +1,6 @@
 from Extract.extract import *
-from Visualisation.visualisation import *
+from Visualisation.movie_plot import *
+from Visualisation.actor_plot import *
 from Traitement.modification import *
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
@@ -33,7 +34,7 @@ alien = ["tt0078748","tt0090605","tt0103644",
          "tt18412256","tt0370263","tt0758730"]
 
 def main():
-    film_file = 'data/film.csv'
+    #film_file = 'data/film.csv'
     ratings_file = '../title.ratings.tsv'
     mcu_file = 'data/MCU_V3_5.csv'
     actor_file = 'data/Acteur.csv'
@@ -46,11 +47,10 @@ def main():
     
     # plot_acteur_rating(table_mcu,table_actor)
     # plot_personnage_apparitions(table_actor)
-    table_name = add_percentage_movies(table_name,table_mcu)
-    plot_distribution_percentages(table_name)
+    plot_distribution_percentages(table_name,table_mcu)
     
     ### Comparaison notes par franchises ###
-    table_movie = pd.read_csv(film_file)
+    # table_movie = pd.read_csv(film_file)
     # table_sw = filtrer_par_tconst(star_wars,table_movie,"Star Wars")
     # table_hp = filtrer_par_tconst(harry_potter,table_movie,"Harry Potter")
     # table_dcu = filtrer_par_tconst(dcu,table_movie,"DCU")
