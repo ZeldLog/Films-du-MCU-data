@@ -13,7 +13,7 @@ def plot_film_rating_per_phases(table):
         6: 'brown'
     }
     
-    table = table[table['film/tv'] == "Film"].copy()
+    table = table[table['titleType'] == "Film"].copy()
     
     phases = table['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
@@ -59,7 +59,7 @@ def plot_series_rating_per_phases(table):
         6: 'brown'
     }
     
-    table = table[table['film/tv'] == "TV (Disney+)"].copy()
+    table = table[table['titleType'] == "TV (Disney+)"].copy()
     
     phases = table['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
@@ -135,7 +135,7 @@ def plot_film_box_office_per_phases(table):
         5: 'orange',
         6: 'brown'
     }
-    films = table[table['film/tv'] == "Film"]
+    films = table[table['titleType'] == "Film"]
     phases = films['phase'].tolist()
     colors = [phases_colors[int(p)] for p in phases]
     
@@ -184,7 +184,7 @@ def plot_film_box_office_yearly_average(table):
         6: 'brown'
     }
 
-    films = table[table['film/tv'] == "Film"].copy()
+    films = table[table['titleType'] == "Film"].copy()
 
     films['release date'] = pd.to_datetime(films['release date'], format='%Y-%m')
     films['year'] = films['release date'].dt.year
@@ -454,4 +454,244 @@ def plot_distribution_percentages(df_actors):
 
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
+    plt.show()
+    
+    
+
+def plot_average_ratings_per_franchise(dfs):
+
+    if not dfs:
+        print("La liste de DataFrames est vide.")
+        return
+    
+    moyennes = []
+    labels = []
+    
+    for i, df in enumerate(dfs):
+        if 'averageRating' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'averageRating'")
+        if 'name' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'name'")
+        
+        moyennes.append(df['averageRating'].mean())
+        labels.append(df['name'].iloc[0])  # on prend le premier nom de la colonne name
+    
+    # Affichage du plot
+    plt.figure(figsize=(8,5))
+    plt.bar(labels, moyennes, color='skyblue')
+    plt.ylim(0,10)
+    plt.xlabel("Franchise")
+    plt.ylabel("Moyenne des avis")
+    plt.title("Moyenne des avis sur les films populaire des franchises")
+    plt.show()
+    
+    return moyennes 
+
+
+def boxplot_par_type_matplotlib(df):
+    """
+    Affiche un boxplot des notes moyennes (averageRating) 
+    en fonction du type (titleType : movie ou series) avec matplotlib.
+    
+    Paramètre :
+    df : pandas DataFrame contenant au moins les colonnes
+         'titleType' et 'averageRating'
+    """
+    if 'titleType' not in df.columns or 'averageRating' not in df.columns:
+        raise ValueError("Le DataFrame doit contenir 'titleType' et 'averageRating'")
+    
+    # Nettoyer les types (supprimer espaces autour)
+    df['titleType'] = df['titleType'].str.strip()
+    
+    # Extraire les types uniques
+    types = df['titleType'].unique()
+    
+    # Construire la liste des données à tracer en filtrant les NaN
+    data = [df[df['titleType'] == t]['averageRating'].dropna() for t in types]
+    
+    # Vérifier qu'on a bien des données
+    if all(len(d) == 0 for d in data):
+        raise ValueError("Aucune donnée valide à tracer. Vérifie 'averageRating'.")
+
+    # Créer le boxplot
+    plt.figure(figsize=(8,6))
+    plt.boxplot(data, labels=types, showfliers=False)
+    plt.title("Répartition des notes par type de production du MCU")
+    plt.xlabel("Type (Film ou Série)")
+    plt.ylabel("Note moyenne")
+    plt.ylim(0, 10)
+    plt.show()
+    
+    
+def scatter_notes_popularite(df):
+    """
+    Nuage de points : popularité (numVotes) vs note moyenne (averageRating)
+    """
+    # Vérifications
+    required = {'numVotes', 'averageRating'}
+    if not required.issubset(df.columns):
+        raise ValueError("Colonnes requises : numVotes, averageRating")
+
+    # Nettoyage
+    df = df.dropna(subset=['numVotes', 'averageRating'])
+
+    plt.figure(figsize=(8,6))
+    plt.scatter(
+        df['averageRating'],
+        df['numVotes'],
+        alpha=0.5,
+        s=20
+    )
+
+
+    y_min = df['numVotes'].min()
+    y_max = df['numVotes'].max()
+    
+    print(y_max)
+
+    plt.ylim(y_min * 0.9, y_max * 1.1)
+    plt.gca().yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", " "))
+    )
+    plt.title("Relation entre nombre de votes et note moyenne des productions global")
+    plt.ylabel("Nombre de votes")
+    plt.xlabel("Note moyenne")
+    plt.xlim(0, 10)
+    plt.grid(True, linestyle='--', alpha=0.4)
+    plt.show()
+
+    
+def plot_distribution_percentages(df_actors):
+    # Forcer l’ordre et les valeurs attendues
+    order = [0, 25, 50, 75, 100]
+
+    counts = (
+        df_actors["pourcentage_films"]
+        .round(0)
+        .astype(int)
+        .value_counts()
+        .reindex(order, fill_value=0)
+    )
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.bar(order, counts.values, width=15, color="steelblue")
+
+    ax.set_title(
+        "Répartition des acteurs selon le pourcentage ",
+        fontsize=14
+    )
+    ax.set_xlabel("Pourcentage selon les 4 Films ayant rendu célèbre l'acteur", fontsize=12)
+    ax.set_ylabel("Nombre de personnes", fontsize=12)
+
+    # ✅ Abscisses en int + symbole %
+    ax.set_xticks(order)
+    ax.set_xticklabels([f"{x}%" for x in order])
+
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.show()
+    
+    
+
+def plot_average_ratings_per_franchise(dfs):
+
+    if not dfs:
+        print("La liste de DataFrames est vide.")
+        return
+    
+    moyennes = []
+    labels = []
+    
+    for i, df in enumerate(dfs):
+        if 'averageRating' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'averageRating'")
+        if 'name' not in df.columns:
+            raise ValueError(f"Le DataFrame {i} ne contient pas la colonne 'name'")
+        
+        moyennes.append(df['averageRating'].mean())
+        labels.append(df['name'].iloc[0])  # on prend le premier nom de la colonne name
+    
+    # Affichage du plot
+    plt.figure(figsize=(8,5))
+    plt.bar(labels, moyennes, color='skyblue')
+    plt.ylim(0,10)
+    plt.xlabel("Franchise")
+    plt.ylabel("Moyenne des avis")
+    plt.title("Moyenne des avis sur les films populaire des franchises")
+    plt.show()
+    
+    return moyennes 
+
+
+def boxplot_par_type_matplotlib(df):
+    """
+    Affiche un boxplot des notes moyennes (averageRating) 
+    en fonction du type (titleType : movie ou series) avec matplotlib.
+    
+    Paramètre :
+    df : pandas DataFrame contenant au moins les colonnes
+         'titleType' et 'averageRating'
+    """
+    if 'titleType' not in df.columns or 'averageRating' not in df.columns:
+        raise ValueError("Le DataFrame doit contenir 'titleType' et 'averageRating'")
+    
+    # Nettoyer les types (supprimer espaces autour)
+    df['titleType'] = df['titleType'].str.strip()
+    
+    # Extraire les types uniques
+    types = df['titleType'].unique()
+    
+    # Construire la liste des données à tracer en filtrant les NaN
+    data = [df[df['titleType'] == t]['averageRating'].dropna() for t in types]
+    
+    # Vérifier qu'on a bien des données
+    if all(len(d) == 0 for d in data):
+        raise ValueError("Aucune donnée valide à tracer. Vérifie 'averageRating'.")
+
+    # Créer le boxplot
+    plt.figure(figsize=(8,6))
+    plt.boxplot(data, labels=types, showfliers=False)
+    plt.title("Répartition des notes par type de production du MCU")
+    plt.xlabel("Type (Film ou Série)")
+    plt.ylabel("Note moyenne")
+    plt.ylim(0, 10)
+    plt.show()
+    
+    
+def scatter_notes_popularite(df):
+    """
+    Nuage de points : popularité (numVotes) vs note moyenne (averageRating)
+    """
+    # Vérifications
+    required = {'numVotes', 'averageRating'}
+    if not required.issubset(df.columns):
+        raise ValueError("Colonnes requises : numVotes, averageRating")
+
+    # Nettoyage
+    df = df.dropna(subset=['numVotes', 'averageRating'])
+
+    plt.figure(figsize=(8,6))
+    plt.scatter(
+        df['averageRating'],
+        df['numVotes'],
+        alpha=0.5,
+        s=20
+    )
+
+
+    y_min = df['numVotes'].min()
+    y_max = df['numVotes'].max()
+    
+    print(y_max)
+
+    plt.ylim(y_min * 0.9, y_max * 1.1)
+    plt.gca().yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", " "))
+    )
+    plt.title("Relation entre nombre de votes et note moyenne des productions global")
+    plt.ylabel("Nombre de votes")
+    plt.xlabel("Note moyenne")
+    plt.xlim(0, 10)
+    plt.grid(True, linestyle='--', alpha=0.4)
     plt.show()

@@ -26,6 +26,12 @@ conda env create -f Environnement/MCU-environment.yml --name MCU_env
 conda activate MCU_env 
 ```
 
+## Nom de fichier de donnée utilisé
+
+name.basics.tsv
+title.basics.tsv
+title.principals.tsv
+title.ratings.tsv
 
 
 ## Reference
