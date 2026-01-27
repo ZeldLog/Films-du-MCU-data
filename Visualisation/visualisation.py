@@ -450,7 +450,7 @@ def plot_average_ratings_per_franchise(dfs):
     plt.ylim(0,10)
     plt.xlabel("Franchise")
     plt.ylabel("Moyenne des avis")
-    plt.title("Moyenne de avis sur les films populaire des franchises")
+    plt.title("Moyenne des avis sur les films populaire des franchises")
     plt.show()
     
     return moyennes 
@@ -488,4 +488,42 @@ def boxplot_par_type_matplotlib(df):
     plt.xlabel("Type (Film ou Série)")
     plt.ylabel("Note moyenne")
     plt.ylim(0, 10)
+    plt.show()
+    
+    
+def scatter_notes_popularite(df):
+    """
+    Nuage de points : popularité (numVotes) vs note moyenne (averageRating)
+    """
+    # Vérifications
+    required = {'numVotes', 'averageRating'}
+    if not required.issubset(df.columns):
+        raise ValueError("Colonnes requises : numVotes, averageRating")
+
+    # Nettoyage
+    df = df.dropna(subset=['numVotes', 'averageRating'])
+
+    plt.figure(figsize=(8,6))
+    plt.scatter(
+        df['averageRating'],
+        df['numVotes'],
+        alpha=0.5,
+        s=20
+    )
+
+
+    y_min = df['numVotes'].min()
+    y_max = df['numVotes'].max()
+    
+    print(y_max)
+
+    plt.ylim(y_min * 0.9, y_max * 1.1)
+    plt.gca().yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", " "))
+    )
+    plt.title("Relation entre nombre de votes et note moyenne des productions global")
+    plt.ylabel("Nombre de votes")
+    plt.xlabel("Note moyenne")
+    plt.xlim(0, 10)
+    plt.grid(True, linestyle='--', alpha=0.4)
     plt.show()
